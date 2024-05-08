@@ -1,7 +1,14 @@
-import { Text } from "react-native";
+import { Text, StyleSheet } from "react-native";
 
 function GameScreen() {
-    return <Text>Game Screen</Text>
+    return <Text style={styles.screen}>Game Screen</Text>
 }
 
 export default GameScreen; 
+
+const styles = StyleSheet.create({
+    screen: {
+        flex:1,
+        padding:24
+    }
+})
