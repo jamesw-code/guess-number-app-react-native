@@ -4,20 +4,30 @@ import { useState } from 'react';
 
 import StartGameScreen from './screens/StartGameScreen';
 import GameScreen from './screens/GameScreen';
+import GamesOverScreen from './screens/GameOverScreen';
 
 import Colors from './util/colors';
 
 export default function App() {
   const [userNumber, setUserNumber] = useState();
+  const [gameIsOver, setGameIsOver] = useState(false);
 
   function pickedNumberHandler(pickedNumber) {
     setUserNumber(pickedNumber);
   }
 
+  function gamesIsOverHandler() {
+    setGameIsOver(true);
+  }
+
   let screen = <StartGameScreen onPickedNumber={pickedNumberHandler}/>;
 
   if(userNumber) {
-    screen = <GameScreen userNumber={userNumber}/>
+    screen = <GameScreen userNumber={userNumber} onGameOver={gamesIsOverHandler} />
+  }
+
+  if(gameIsOver) {
+    screen = <GamesOverScreen></GamesOverScreen>
   }
 
   return (

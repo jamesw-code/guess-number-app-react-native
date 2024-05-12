@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {View, Text, StyleSheet, Alert } from "react-native";
 
 import Title from "../components/ui/title";
@@ -18,25 +18,39 @@ function generateRandomBetween(min, max, exclude) {
 let minBoundary = 1;
 let maxBoundary = 100;
 
-function GameScreen({userNumber}) {
-  const initialGuess = generateRandomBetween(minBoundary, maxBoundary, userNumber);
+function GameScreen({userNumber, onGameOver}) {
+  const initialGuess = generateRandomBetween(1, 100, userNumber);
   const [currentGuess, setCurrentGuess] = useState(initialGuess);
 
+  useEffect(() => {
+    if(currentGuess === userNumber) {
+      console.log("Game is Over!");
+      onGameOver();
+    }
+  })
+
   function nextGuessHandler(direction) {
-    console.log(currentGuess + ' '+ userNumber)
+
     if(
-      (direction === 'lower' && currentGuess < userNumber) ||
-      (direction === 'greater' && currentGuess > userNumber)
+      (direction === 'lower' && userNumber > currentGuess) ||
+      (direction === 'greater' && userNumber < currentGuess)
     ) {
+      console.log('Direction: ' + direction)
+      console.log('Current Guess: ' + currentGuess)
+      console.log('userNumber: ' + userNumber)
       Alert.alert("Are you sure?", "Was that correct?", [{text: 'Sorry', style: 'cancel'}])
       return;
     }
+
 
     if(direction === 'lower'){
       maxBoundary = currentGuess;
     } else {
       minBoundary = currentGuess + 1; 
     }
+    console.log('minBoundary: ' + minBoundary)
+    console.log('maxBoundary: ' + maxBoundary)
+    console.log('currentGuess: ' + currentGuess)
     const newRndNumber = generateRandomBetween(minBoundary, maxBoundary, currentGuess);
     setCurrentGuess(newRndNumber);
   }
@@ -44,7 +58,7 @@ function GameScreen({userNumber}) {
   return (
     <View style={styles.screen}>
       <Title>Oponents Guess</Title>
-      <NumberContainer>{initialGuess}</NumberContainer>
+      <NumberContainer>{currentGuess}</NumberContainer>
       <View>
         <Text>Higher or Lower?</Text>
         <View>
